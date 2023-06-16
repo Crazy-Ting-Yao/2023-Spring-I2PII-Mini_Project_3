@@ -11,9 +11,68 @@
  * 
  * @return int 
  */
-int State::evaluate(){
-  // [TODO] design your own evaluation function
-  return 0;
+
+enum Value {
+    KING = (int)5e8,
+    QUEEN = (int)1e6,
+    ROOK = (int)1e4,
+    BISHOP = (int)1e3,
+    KNIGHT = (int)1e3,
+    PAWN = 10
+};
+
+int State::evaluate() {
+    
+    int value = 0;
+    for (int i = 0; i < BOARD_H; i += 1) {
+        for (int j = 0; j < BOARD_W; j += 1) {
+            switch (this->board.board[0][i][j]) {
+                case 1:
+                    value += PAWN;
+                    break;
+                case 2:
+                    value += ROOK;
+                    break;
+                case 3:
+                    value += KNIGHT;
+                    break;
+                case 4:
+                    value += BISHOP;
+                    break;
+                case 5:
+                    value += QUEEN;
+                    break;
+                case 6:
+                    value += KING;
+                    break;
+                default:
+                    break;
+            }
+            switch (this->board.board[1][i][j]) {
+                case 1:
+                    value -= PAWN;
+                    break;
+                case 2:
+                    value -= ROOK;
+                    break;
+                case 3:
+                    value -= KNIGHT;
+                    break;
+                case 4:
+                    value -= BISHOP;
+                    break;
+                case 5:
+                    value -= QUEEN;
+                    break;
+                case 6:
+                    value -= KING;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return value;
 }
 
 
