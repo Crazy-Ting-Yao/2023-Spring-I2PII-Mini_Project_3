@@ -14,10 +14,10 @@
 
 enum Value {
     KING = (int)5e8,
-    QUEEN = (int)1e6,
-    ROOK = (int)1e4,
-    BISHOP = (int)1e3,
-    KNIGHT = (int)1e3,
+    QUEEN = (int)10000,
+    ROOK = (int)1000,
+    BISHOP = (int)500,
+    KNIGHT = (int)100,
     PAWN = 10
 };
 
@@ -26,7 +26,7 @@ int State::evaluate() {
     int value = 0;
     for (int i = 0; i < BOARD_H; i += 1) {
         for (int j = 0; j < BOARD_W; j += 1) {
-            switch (this->board.board[0][i][j]) {
+            switch (this->board.board[1-player][i][j]) {
                 case 1:
                     value += PAWN;
                     break;
@@ -48,7 +48,7 @@ int State::evaluate() {
                 default:
                     break;
             }
-            switch (this->board.board[1][i][j]) {
+            switch (this->board.board[player][i][j]) {
                 case 1:
                     value -= PAWN;
                     break;
