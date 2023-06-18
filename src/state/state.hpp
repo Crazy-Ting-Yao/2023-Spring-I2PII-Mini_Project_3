@@ -11,6 +11,8 @@
 
 typedef std::pair<size_t, size_t> Point;
 typedef std::pair<Point, Point> Move;
+
+
 class Board{
   public:
     char board[2][BOARD_H][BOARD_W] = {{
@@ -45,6 +47,7 @@ class State{
     //You may want to add more property for a state
     GameState game_state = UNKNOWN;
     Board board;
+
     int player = 0;
     std::vector<Move> legal_actions;
     
@@ -52,12 +55,13 @@ class State{
     State(int player): player(player){};
     State(Board board): board(board){};
     State(Board board, int player): board(board), player(player){};
-    
     int evaluate();
-    State* next_state(Move move);
+    State* next_state(Move move, bool get_legal_actions=true);
     void get_legal_actions();
     std::string encode_output();
     std::string encode_state();
 };
+
+
 
 #endif

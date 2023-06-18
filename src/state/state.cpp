@@ -1,7 +1,6 @@
-#include <iostream>
 #include <sstream>
 #include <cstdint>
-
+#include <algorithm>
 #include "./state.hpp"
 #include "../config.hpp"
 
@@ -13,20 +12,23 @@
  */
 
 enum Value {
-    KING = (int)5e8,
-    QUEEN = (int)10000,
-    ROOK = (int)1000,
-    BISHOP = (int)500,
-    KNIGHT = (int)100,
+    KING = 2000,
+    QUEEN = 90,
+    ROOK = 50,
+    BISHOP = 30,
+    KNIGHT = 30,
     PAWN = 10
 };
+
+
+
 
 int State::evaluate() {
     
     int value = 0;
-    for (int i = 0; i < BOARD_H; i += 1) {
-        for (int j = 0; j < BOARD_W; j += 1) {
-            switch (this->board.board[1-player][i][j]) {
+    for (int i = 0; i < BOARD_H; i++ ) {
+        for (int j = 0; j < BOARD_W; j++ ) {
+            switch (this->board.board[player][i][j]) {
                 case 1:
                     value += PAWN;
                     break;
@@ -48,7 +50,7 @@ int State::evaluate() {
                 default:
                     break;
             }
-            switch (this->board.board[player][i][j]) {
+            switch (this->board.board[1-player][i][j]) {
                 case 1:
                     value -= PAWN;
                     break;
@@ -72,6 +74,7 @@ int State::evaluate() {
             }
         }
     }
+    value += legal_actions.size();
     return value;
 }
 
@@ -82,7 +85,7 @@ int State::evaluate() {
  * @param move 
  * @return State* 
  */
-State* State::next_state(Move move){
+State* State::next_state(Move move, bool get_legal_actions){
   Board next = this->board;
   Point from = move.first, to = move.second;
   
@@ -100,7 +103,7 @@ State* State::next_state(Move move){
   
   State* next_state = new State(next, 1-this->player);
   
-  if(this->game_state != WIN)
+  if(this->game_state != WIN && get_legal_actions)
     next_state->get_legal_actions();
   return next_state;
 }
@@ -136,6 +139,9 @@ void State::get_legal_actions(){
   // [Optional]
   // This method is not very efficient
   // You can redesign it
+
+  
+
   this->game_state = NONE;
   std::vector<Move> all_actions;
   auto self_board = this->board.board[this->player];
@@ -156,7 +162,7 @@ void State::get_legal_actions(){
                 all_actions.push_back(Move(Point(i, j), Point(i+1, j+1)));
                 if(oppn_piece==6){
                   this->game_state = WIN;
-                  this->legal_actions = all_actions;
+                  this->legal_actions = {};
                   return;
                 }
               }
@@ -164,7 +170,7 @@ void State::get_legal_actions(){
                 all_actions.push_back(Move(Point(i, j), Point(i+1, j-1)));
                 if(oppn_piece==6){
                   this->game_state = WIN;
-                  this->legal_actions = all_actions;
+                  this->legal_actions = {};
                   return;
                 }
               }
@@ -176,7 +182,7 @@ void State::get_legal_actions(){
                 all_actions.push_back(Move(Point(i, j), Point(i-1, j+1)));
                 if(oppn_piece==6){
                   this->game_state = WIN;
-                  this->legal_actions = all_actions;
+                  this->legal_actions = {};
                   return;
                 }
               }
@@ -184,7 +190,7 @@ void State::get_legal_actions(){
                 all_actions.push_back(Move(Point(i, j), Point(i-1, j-1)));
                 if(oppn_piece==6){
                   this->game_state = WIN;
-                  this->legal_actions = all_actions;
+                  this->legal_actions = {};
                   return;
                 }
               }
@@ -216,7 +222,7 @@ void State::get_legal_actions(){
                 if(oppn_piece){
                   if(oppn_piece==6){
                     this->game_state = WIN;
-                    this->legal_actions = all_actions;
+                    this->legal_actions = {};
                     return;
                   }else
                     break;
@@ -238,7 +244,7 @@ void State::get_legal_actions(){
               oppn_piece = oppn_board[x][y];
               if(oppn_piece==6){
                 this->game_state = WIN;
-                this->legal_actions = all_actions;
+                this->legal_actions = {};
                 return;
               }
             }
@@ -257,7 +263,7 @@ void State::get_legal_actions(){
               oppn_piece = oppn_board[p[0]][p[1]];
               if(oppn_piece==6){
                 this->game_state = WIN;
-                this->legal_actions = all_actions;
+                this->legal_actions = {};
                 return;
               }
             }
@@ -266,7 +272,7 @@ void State::get_legal_actions(){
       }
     }
   }
-  std::cout << "\n";
+  // std::cout << "\n";
   this->legal_actions = all_actions;
 }
 
