@@ -10,12 +10,12 @@
  */
 
 enum Value {
-    KING = 2000,
-    QUEEN = 90,
-    ROOK = 50,
-    BISHOP = 30,
-    KNIGHT = 30,
-    PAWN = 10
+    KING = 4000,
+    QUEEN = 180,
+    ROOK = 100,
+    BISHOP = 60,
+    KNIGHT = 60,
+    PAWN = 20
 };
 
 int State::evaluate() {
@@ -27,14 +27,14 @@ int State::evaluate() {
                 case 1:
                     value += PAWN;
 					if(pawn_pos[player][j])
-						value -= 2;
+						value -= 4;
 					else 
 						pawn_pos[player][j] = 1;
 					if(player && i == BOARD_H - 2){
-						value += 5;
+						value += 10;
 					}
 					else if(!player && i == 1){
-						value += 5;
+						value += 10;
 					}
                     break;
                 case 2:
@@ -42,30 +42,19 @@ int State::evaluate() {
                     break;
                 case 3:
                     value += KNIGHT;
-					if(i == 0 || i == BOARD_H - 1)
-						value -= 3;
-					if(j == 0 || j == BOARD_W - 1)
-						value -= 3;
                     break;
                 case 4:
                     value += BISHOP;
-					if(i == 0 || i == BOARD_H - 1)
-						value -= 1;
-					if(j == 0 || j == BOARD_W - 1)
-						value -= 1;
-                    break;
                     break;
                 case 5:
                     value += QUEEN;
 					if(i == 0 || i == BOARD_H - 1)
-						value -= 1;
+						value -= 2;
 					if(j == 0 || j == BOARD_W - 1)
-						value -= 1;
+						value -= 2;
                     break;
                 case 6:
                     value += KING;
-					if(player) value -= i;
-					else value -= BOARD_H - i - 1;
                     break;
                 default:
                     break;
@@ -74,51 +63,41 @@ int State::evaluate() {
                 case 1:
                     value -= PAWN;
 					if(pawn_pos[1-player][j])
-						value += 2;
+						value += 4;
 					else 
 						pawn_pos[1-player][j] = 1;
+					if(!player && i == BOARD_H - 2){
+						value -= 10;
+					}
+					else if(player && i == 1){
+						value -= 10;
+					}
                     break;
-					if(player && i == BOARD_H - 2){
-						value -= 5;
-					}
-					else if(!player && i == 1){
-						value -= 5;
-					}
                 case 2:
                     value -= ROOK;
                     break;
                 case 3:
                     value -= KNIGHT;
-					if(i == 0 || i == BOARD_H - 1)
-						value += 3;
-					if(j == 0 || j == BOARD_W - 1)
-						value += 3;
                     break;
                 case 4:
                     value -= BISHOP;
-					if(i == 0 || i == BOARD_H - 1)
-						value += 1;
-					if(j == 0 || j == BOARD_W - 1)
-						value += 1;
                     break;
                 case 5:
                     value -= QUEEN;
 					if(i == 0 || i == BOARD_H - 1)
-						value += 1;
+						value += 2;
 					if(j == 0 || j == BOARD_W - 1)
-						value += 1;
+						value += 2;
                     break;
                 case 6:
                     value -= KING;
-					if(player) value += i;
-					else value += BOARD_H - i - 1;
                     break;
                 default:
                     break;
             }
         }
     }
-    value += legal_actions.size();
+    //value += legal_actions.size() * 2;
     return value;
 }
 

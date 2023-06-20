@@ -37,7 +37,7 @@ void read_board(std::ifstream& fin) {
 void write_valid_spot(std::ofstream& fout) {
     // Keep updating the output until getting killed.
     while (true) {
-        auto move = MCTS_alphabeta::get_move(root, 1000000);
+        auto move = MCTS_alphabeta::get_move(root, 500000);
         fout << move.first.first << " " << move.first.second << " "
              << move.second.first << " " << move.second.second << std::endl;
 

@@ -1,4 +1,4 @@
-#include "./alphabeta.hpp"
+#include "./submission.hpp"
 #include <cstdlib>
 #include <vector>
 #include <ctime>

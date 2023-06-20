@@ -180,7 +180,7 @@ bool MCTS_alphabeta::evaluation(State* state) {
 }
 
 Move AlphaBeta::get_move(State *state, int depth) {
-    Move best_move;
+    Move best_move = state->legal_actions[0];
     int alpha = NEGINF;
     for (auto move : state->legal_actions) {
         State* next_state = state->next_state(move);
@@ -193,13 +193,13 @@ Move AlphaBeta::get_move(State *state, int depth) {
     delete state;
     return best_move;
 }
-int AlphaBeta::recursion(State *state, const int depth, const bool player, int alpha, int beta) {
+int AlphaBeta::recursion(State *state, const int depth, const bool isMax, int alpha, int beta) {
     if(state->game_state == WIN)
-        return player ? INF : NEGINF;
+        return isMax ? INF : NEGINF;
     if (!depth) {
-        return player ? state->evaluate() : -state->evaluate();
+        return isMax ? state->evaluate() : -state->evaluate();
     }
-    if (player) {
+    if (isMax) {
         int ret = NEGINF;
         for (auto move : state->legal_actions) {
             State* next_state = state->next_state(move, (depth != 1));
